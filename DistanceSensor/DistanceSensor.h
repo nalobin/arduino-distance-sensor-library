@@ -38,6 +38,7 @@
 class DistanceSensor
 {
   public:
+    virtual int getDistanceCentimeter()=0;
     boolean isCloser(int threshold);              // Compare distance value to threshold
     boolean isFarther(int threshold);             // Compare distance value to threshold
 
@@ -47,7 +48,6 @@ class DistanceSensor
     int _average;
 
   private:
-    virtual int getDistanceCentimeter()=0;
 //    inline virtual void begin(){ /*void*/ };
 // Is implemented in derived classes
 };
