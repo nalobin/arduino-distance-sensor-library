@@ -21,29 +21,33 @@
 /// Begin function to set default pins
 void UltrasonicDistanceSensor::begin()
 {
-  begin (2,3);
+  begin( 2,3 );
 }
 
 /// Begin variables
 /// - int trigPin: pin used to activate the sensor
 /// - int echoPin: pin used to read the reflection
-void UltrasonicDistanceSensor::begin(int echoPin, int trigPin)
-{
+void UltrasonicDistanceSensor::begin( int echoPin, int trigPin ) {
   _trigPin=trigPin;
   _echoPin=echoPin;
   pinMode(_trigPin, OUTPUT);
   pinMode(_echoPin, INPUT);
   setAveraging(1);                                //1: all samples passed to higher level
+  _null_distances = 0;
+  _null_distances_cnt = 0;
 }
 
 /// getDistanceCentimeter(): Returns the distance in centimeters
-int UltrasonicDistanceSensor::getDistanceCentimeter()
-{
-  return (getDistanceTime()/58);
-}
+int UltrasonicDistanceSensor::getDistanceCentimeter() {
+	int cm = getDistanceTime() / 58;
 
-/// getDistanceInch(): Returns the distance in inches
-int UltrasonicDistanceSensor::getDistanceInch()
-{
-  return (getDistanceTime()/148);
+	if ( _null_distances_cnt && _null_distances ) {
+		for ( int i = 0; i < _null_distances_cnt; i++ ) {
+			if ( _null_distances[ i ] == cm ) {
+				return 0;
+			}
+		}
+	}
+
+	return cm;
 }

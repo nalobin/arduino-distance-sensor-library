@@ -42,12 +42,17 @@ class UltrasonicDistanceSensor : public DistanceSensor
 
     void begin();
     void begin(int echoPin, int trigPin);
+    void setNullDistances( int *distances, int count ) {
+    	_null_distances = distances;
+    	_null_distances_cnt = count;
+    }
 
     int getDistanceCentimeter();
-    int getDistanceInch();
 
   protected:
     int _trigPin;
     int _echoPin;
+    int *_null_distances;
+    int _null_distances_cnt;
 };
 #endif
